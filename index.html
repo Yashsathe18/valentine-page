@@ -17,10 +17,10 @@
   }
 
   .box {
-    width: 85%;
-    max-width: 500px;
+    width: 90%;
+    max-width: 520px;
     border: 3px dashed #ff6f91;
-    padding: 40px 20px;
+    padding: 40px 20px 70px;
     text-align: center;
     position: relative;
     background: #fde9ef;
@@ -32,6 +32,7 @@
     margin-bottom: 40px;
   }
 
+  /* YES button */
   #yesBtn {
     background: #ff6f91;
     color: #ffe600;
@@ -42,18 +43,20 @@
     cursor: pointer;
     position: relative;
     z-index: 2;
+    margin-right: 25px; /* spacing from NO */
   }
 
+  /* NO button */
   #noBtn {
     position: absolute;
     background: #2c2c2c;
     color: white;
-    padding: 10px 22px;
-    border-radius: 8px;
+    padding: 16px 34px;        /* bigger for phone */
+    border-radius: 10px;
     border: 2px solid white;
     cursor: pointer;
-    left: 55%;
-    top: 65%;
+    left: 65%;                 /* clearly right of YES */
+    top: 62%;
     transition: transform 0.1s;
     z-index: 3;
   }
@@ -67,6 +70,7 @@
 
 <body>
 
+<!-- Uploaded song -->
 <audio id="music" loop>
   <source src="perfect.mp3" type="audio/mpeg">
 </audio>
@@ -82,7 +86,7 @@ const box = document.getElementById("box");
 const noBtn = document.getElementById("noBtn");
 const music = document.getElementById("music");
 
-// NO button logic — SAFE for mouse + touch
+/* NO button runs away (mouse + touch safe) */
 box.addEventListener("pointermove", (e) => {
   const rect = box.getBoundingClientRect();
   const noRect = noBtn.getBoundingClientRect();
@@ -93,19 +97,20 @@ box.addEventListener("pointermove", (e) => {
   const noX = noRect.left - rect.left + noRect.width / 2;
   const noY = noRect.top - rect.top + noRect.height / 2;
 
-  if (Math.hypot(noX - x, noY - y) < 100) {
+  if (Math.hypot(noX - x, noY - y) < 120) {
     noBtn.style.transform = "translateX(4px)";
     setTimeout(() => noBtn.style.transform = "translateX(-4px)", 50);
 
-    noBtn.style.left = Math.random() * (rect.width - noRect.width) + "px";
-    noBtn.style.top = Math.random() * (rect.height - noRect.height) + "px";
+    noBtn.style.left =
+      Math.random() * (rect.width - noRect.width) + "px";
+    noBtn.style.top =
+      Math.random() * (rect.height - noRect.height) + "px";
   }
 });
 
-// YES button — INLINE + GUARANTEED
+/* YES button */
 function onYesClick() {
-  // try playing music, never block UI
-  music.play().catch(() => {});
+  music.play().catch(() => {}); // never block UI
 
   box.innerHTML = `
     <h1>YAYY! 💕</h1>
