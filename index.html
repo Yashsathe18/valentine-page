@@ -55,7 +55,7 @@
     transition: transform 0.1s;
   }
 
-  .yes-message p {
+  p {
     font-size: 18px;
     margin: 10px 0;
   }
@@ -64,8 +64,8 @@
 
 <body>
 
-<!-- Audio stays in DOM -->
-<audio id="bgMusic" autoplay loop>
+<!-- Your uploaded audio file -->
+<audio id="music" loop>
   <source src="perfect.mp3" type="audio/mpeg">
 </audio>
 
@@ -82,7 +82,7 @@ const box = document.getElementById("box");
 const title = document.getElementById("title");
 const music = document.getElementById("music");
 
-// NO button: nervous shake + move
+// NO button movement
 box.addEventListener("mousemove", (e) => {
   const rect = box.getBoundingClientRect();
   const noRect = noBtn.getBoundingClientRect();
@@ -93,31 +93,24 @@ box.addEventListener("mousemove", (e) => {
   const noX = noRect.left - rect.left + noRect.width / 2;
   const noY = noRect.top - rect.top + noRect.height / 2;
 
-  const distance = Math.hypot(noX - x, noY - y);
-
-  if (distance < 100) {
+  if (Math.hypot(noX - x, noY - y) < 100) {
     noBtn.style.transform = "translateX(4px)";
     setTimeout(() => noBtn.style.transform = "translateX(-4px)", 50);
 
-    const maxX = rect.width - noRect.width;
-    const maxY = rect.height - noRect.height;
-
-    noBtn.style.left = Math.random() * maxX + "px";
-    noBtn.style.top = Math.random() * maxY + "px";
+    noBtn.style.left = Math.random() * (rect.width - noRect.width) + "px";
+    noBtn.style.top = Math.random() * (rect.height - noRect.height) + "px";
   }
 });
 
-// YES button: start music + change content ONLY
+// YES click → MUSIC STARTS HERE
 yesBtn.addEventListener("click", () => {
-  music.play(); // ✅ guaranteed to work
+  music.play();   // ✅ user interaction → allowed everywhere
 
   box.innerHTML = `
     <h1>YAYY! 💕</h1>
-    <div class="yes-message">
-      <p>It’s officially a romantic dinner date on 14th 🍽️✨</p>
-      <p>Dress cute, bring your smile… I’ll bring flowers 🌹</p>
-      <p>(If payment doesn’t come on time, I’ll wash dishes 😌)</p>
-    </div>
+    <p>It’s officially a romantic dinner date on 14th 🍽️✨</p>
+    <p>Dress cute, bring your smile… I’ll bring flowers 🌹</p>
+    <p>(If payment doesn’t come on time, I’ll wash dishes 😌)</p>
   `;
 });
 </script>
