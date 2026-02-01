@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Valentine?</title>
+<style>
+  body {
+    background: #fce4ec;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-family: Arial, sans-serif;
+  }
+  .container {
+    text-align: center;
+    border: 3px dashed #ff4081;
+    width: 70%;
+    padding: 40px;
+    position: relative;
+  }
+  h1 {
+    font-size: 2.2rem;
+    color: #d81b60;
+    margin-bottom: 30px;
+  }
+  #yesBtn {
+    background: pink;
+    color: yellow;
+    padding: 20px 50px;
+    border-radius: 50px;
+    border: 3px solid #ff4081;
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+  #noBtn {
+    background: black;
+    color: white;
+    padding: 12px 25px;
+    border: 3px solid white;
+    border-radius: 8px;
+    position: absolute;
+  }
+</style>
+</head>
+<body>
+
+<div class="container" id="box">
+  <h1>Reeya, will you be my Valentine?</h1>
+  <button id="yesBtn">YES</button>
+  <button id="noBtn">NO</button>
+</div>
+
+<script>
+const noBtn = document.getElementById("noBtn");
+const box = document.getElementById("box");
+
+box.addEventListener("mousemove", function(e) {
+    const rect = box.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    const noRect = noBtn.getBoundingClientRect();
+    const noX = noRect.left - rect.left + noRect.width / 2;
+    const noY = noRect.top - rect.top + noRect.height / 2;
+
+    const distance = Math.hypot(noX - x, noY - y);
+
+    if (distance < 120) {
+        const maxX = rect.width - noRect.width;
+        const maxY = rect.height - noRect.height;
+        const randX = Math.random() * maxX;
+        const randY = Math.random() * maxY;
+
+        noBtn.style.left = randX + "px";
+        noBtn.style.top = randY + "px";
+    }
+});
+</script>
+
+</body>
+</html>
