@@ -55,18 +55,7 @@
     transition: transform 0.1s;
   }
 
-  #playBtn {
-    margin-top: 20px;
-    background: #ff6f91;
-    color: #ffe600;
-    font-size: 18px;
-    padding: 14px 30px;
-    border-radius: 30px;
-    border: none;
-    cursor: pointer;
-  }
-
-  p {
+  .yes-message p {
     font-size: 18px;
     margin: 10px 0;
   }
@@ -75,7 +64,7 @@
 
 <body>
 
-<!-- Instrumental music -->
+<!-- Audio stays in DOM -->
 <audio id="music" loop>
   <source src="https://cdn.pixabay.com/download/audio/2022/10/18/audio_4c6dff7e98.mp3?filename=romantic-piano-ambient-121981.mp3" type="audio/mpeg">
 </audio>
@@ -90,9 +79,10 @@
 const noBtn = document.getElementById("noBtn");
 const yesBtn = document.getElementById("yesBtn");
 const box = document.getElementById("box");
+const title = document.getElementById("title");
 const music = document.getElementById("music");
 
-// NO button: shake + move
+// NO button: nervous shake + move
 box.addEventListener("mousemove", (e) => {
   const rect = box.getBoundingClientRect();
   const noRect = noBtn.getBoundingClientRect();
@@ -103,28 +93,32 @@ box.addEventListener("mousemove", (e) => {
   const noX = noRect.left - rect.left + noRect.width / 2;
   const noY = noRect.top - rect.top + noRect.height / 2;
 
-  if (Math.hypot(noX - x, noY - y) < 100) {
+  const distance = Math.hypot(noX - x, noY - y);
+
+  if (distance < 100) {
     noBtn.style.transform = "translateX(4px)";
     setTimeout(() => noBtn.style.transform = "translateX(-4px)", 50);
 
-    noBtn.style.left = Math.random() * (rect.width - noRect.width) + "px";
-    noBtn.style.top = Math.random() * (rect.height - noRect.height) + "px";
+    const maxX = rect.width - noRect.width;
+    const maxY = rect.height - noRect.height;
+
+    noBtn.style.left = Math.random() * maxX + "px";
+    noBtn.style.top = Math.random() * maxY + "px";
   }
 });
 
-// YES button
+// YES button: start music + change content ONLY
 yesBtn.addEventListener("click", () => {
+  music.play(); // ✅ guaranteed to work
+
   box.innerHTML = `
     <h1>YAYY! 💕</h1>
-    <p>It’s officially a romantic dinner date on 14th 🍽️✨</p>
-    <p>Dress cute, bring your smile… I’ll bring flowers 🌹</p>
-    <p>(If payment doesn’t come on time, I’ll wash dishes 😌)</p>
-    <button id="playBtn">click me</button>
+    <div class="yes-message">
+      <p>It’s officially a romantic dinner date on 14th 🍽️✨</p>
+      <p>Dress cute, bring your smile… I’ll bring flowers 🌹</p>
+      <p>(If payment doesn’t come on time, I’ll wash dishes 😌)</p>
+    </div>
   `;
-
-  document.getElementById("playBtn").addEventListener("click", () => {
-    music.play();
-  });
 });
 </script>
 
