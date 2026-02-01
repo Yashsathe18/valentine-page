@@ -20,7 +20,7 @@
     width: 90%;
     max-width: 520px;
     border: 3px dashed #ff6f91;
-    padding: 40px 20px 70px;
+    padding: 40px 20px 80px;
     text-align: center;
     position: relative;
     background: #fde9ef;
@@ -32,6 +32,14 @@
     margin-bottom: 40px;
   }
 
+  /* Button row */
+  .btn-row {
+    display: flex;
+    justify-content: center;
+    gap: 30px;               /* spacing between YES & NO */
+    position: relative;
+  }
+
   /* YES button */
   #yesBtn {
     background: #ff6f91;
@@ -41,24 +49,20 @@
     border-radius: 40px;
     border: none;
     cursor: pointer;
-    position: relative;
     z-index: 2;
-    margin-right: 25px; /* spacing from NO */
   }
 
-  /* NO button */
+  /* NO button (bigger) */
   #noBtn {
-    position: absolute;
     background: #2c2c2c;
     color: white;
-    padding: 16px 34px;        /* bigger for phone */
+    padding: 16px 36px;      /* bigger size */
     border-radius: 10px;
     border: 2px solid white;
     cursor: pointer;
-    left: 65%;                 /* clearly right of YES */
-    top: 62%;
-    transition: transform 0.1s;
     z-index: 3;
+    position: relative;      /* normal position initially */
+    transition: transform 0.1s;
   }
 
   p {
@@ -70,47 +74,54 @@
 
 <body>
 
-<!-- Uploaded song -->
 <audio id="music" loop>
   <source src="perfect.mp3" type="audio/mpeg">
 </audio>
 
 <div class="box" id="box">
   <h1 id="title">Chota Baby, will you be my Valentine?</h1>
-  <button id="yesBtn" onclick="onYesClick()">YES</button>
-  <button id="noBtn">NO</button>
+
+  <div class="btn-row" id="btnRow">
+    <button id="yesBtn" onclick="onYesClick()">YES</button>
+    <button id="noBtn">NO</button>
+  </div>
 </div>
 
 <script>
 const box = document.getElementById("box");
+const btnRow = document.getElementById("btnRow");
 const noBtn = document.getElementById("noBtn");
 const music = document.getElementById("music");
 
-/* NO button runs away (mouse + touch safe) */
-box.addEventListener("pointermove", (e) => {
-  const rect = box.getBoundingClientRect();
+/* NO button escape logic */
+btnRow.addEventListener("pointermove", (e) => {
+  const rowRect = btnRow.getBoundingClientRect();
   const noRect = noBtn.getBoundingClientRect();
 
-  const x = e.clientX - rect.left;
-  const y = e.clientY - rect.top;
+  const x = e.clientX - rowRect.left;
+  const y = e.clientY - rowRect.top;
 
-  const noX = noRect.left - rect.left + noRect.width / 2;
-  const noY = noRect.top - rect.top + noRect.height / 2;
+  const noX = noRect.left - rowRect.left + noRect.width / 2;
+  const noY = noRect.top - rowRect.top + noRect.height / 2;
 
   if (Math.hypot(noX - x, noY - y) < 120) {
+    // switch to absolute ONLY when escaping
+    noBtn.style.position = "absolute";
+
+    const maxX = rowRect.width - noRect.width;
+    const maxY = rowRect.height - noRect.height;
+
+    noBtn.style.left = Math.random() * maxX + "px";
+    noBtn.style.top = Math.random() * maxY + "px";
+
     noBtn.style.transform = "translateX(4px)";
     setTimeout(() => noBtn.style.transform = "translateX(-4px)", 50);
-
-    noBtn.style.left =
-      Math.random() * (rect.width - noRect.width) + "px";
-    noBtn.style.top =
-      Math.random() * (rect.height - noRect.height) + "px";
   }
 });
 
 /* YES button */
 function onYesClick() {
-  music.play().catch(() => {}); // never block UI
+  music.play().catch(() => {});
 
   box.innerHTML = `
     <h1>YAYY! 💕</h1>
