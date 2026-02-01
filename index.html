@@ -77,17 +77,7 @@ const yesBtn = document.getElementById("yesBtn");
 const box = document.getElementById("box");
 const music = document.getElementById("music");
 
-let musicStarted = false;
-
-// Start music on first interaction (Android safe)
-document.body.addEventListener("click", () => {
-  if (!musicStarted) {
-    music.play();
-    musicStarted = true;
-  }
-});
-
-// NO button runs + shakes
+// NO button moves + shakes nervously
 box.addEventListener("mousemove", (e) => {
   const rect = box.getBoundingClientRect();
   const noRect = noBtn.getBoundingClientRect();
@@ -101,9 +91,11 @@ box.addEventListener("mousemove", (e) => {
   const distance = Math.hypot(noX - x, noY - y);
 
   if (distance < 100) {
+    // nervous shake
     noBtn.style.transform = "translateX(4px)";
     setTimeout(() => noBtn.style.transform = "translateX(-4px)", 50);
 
+    // move inside box
     const maxX = rect.width - noRect.width;
     const maxY = rect.height - noRect.height;
 
@@ -112,8 +104,10 @@ box.addEventListener("mousemove", (e) => {
   }
 });
 
-// YES button message
+// YES button → start music + show message
 yesBtn.addEventListener("click", () => {
+  music.play(); // ✅ allowed on all browsers
+
   document.body.innerHTML = `
     <div style="
       height:100vh;
