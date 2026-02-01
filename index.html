@@ -5,27 +5,27 @@ const box = document.getElementById("box");
 
 box.addEventListener("mousemove", function(e) {
     const rect = box.getBoundingClientRect();
+    const noRect = noBtn.getBoundingClientRect();
+
+    if (!rect || !noRect) return;
+
+    const maxX = rect.width - noRect.width;
+    const maxY = rect.height - noRect.height;
+
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
 
-    const noRect = noBtn.getBoundingClientRect();
     const noX = noRect.left - rect.left + noRect.width / 2;
     const noY = noRect.top - rect.top + noRect.height / 2;
 
     const distance = Math.hypot(noX - x, noY - y);
 
     if (distance < 120) {
-        const maxX = rect.width - noRect.width;
-        const maxY = rect.height - noRect.height;
-        const randX = Math.random() * maxX;
-        const randY = Math.random() * maxY;
-
-        noBtn.style.left = randX + "px";
-        noBtn.style.top = randY + "px";
+        noBtn.style.left = Math.random() * maxX + "px";
+        noBtn.style.top = Math.random() * maxY + "px";
     }
 });
 
-// WHAT HAPPENS WHEN SHE TAPS YES 💖
 yesBtn.addEventListener("click", function() {
     document.body.innerHTML = `
       <div style="
@@ -43,7 +43,7 @@ yesBtn.addEventListener("click", function() {
         <h1>YAYY! 💕</h1>
         <p>It’s officially a romantic dinner date on 14th! 🍽️✨</p>
         <p>Dress cute, bring your smile… I’ll bring flowers 🌹</p>
-        <p>(And don’t worry — if payment doesn’t come on time, I’m washing plates to pay the bill 😉)</p>
+        <p>(And don’t worry — if my payment doesn’t come on time, I’m washing plates to pay the bill 😉)</p>
       </div>
     `;
 });
