@@ -20,7 +20,7 @@
     width: 90%;
     max-width: 520px;
     border: 3px dashed #ff6f91;
-    padding: 40px 20px 80px;
+    padding: 40px 20px 70px;
     text-align: center;
     position: relative;
     background: #fde9ef;
@@ -32,11 +32,12 @@
     margin-bottom: 40px;
   }
 
-  /* Button row */
+  /* Row so YES and NO start side-by-side */
   .btn-row {
     display: flex;
     justify-content: center;
-    gap: 30px;               /* spacing between YES & NO */
+    align-items: center;
+    gap: 25px;
     position: relative;
   }
 
@@ -49,20 +50,21 @@
     border-radius: 40px;
     border: none;
     cursor: pointer;
+    position: relative;
     z-index: 2;
   }
 
-  /* NO button (bigger) */
+  /* NO button */
   #noBtn {
     background: #2c2c2c;
     color: white;
-    padding: 16px 36px;      /* bigger size */
+    padding: 16px 34px;
     border-radius: 10px;
     border: 2px solid white;
     cursor: pointer;
-    z-index: 3;
-    position: relative;      /* normal position initially */
+    position: relative;
     transition: transform 0.1s;
+    z-index: 3;
   }
 
   p {
@@ -74,12 +76,13 @@
 
 <body>
 
+<!-- YOUR UPLOADED SONG -->
 <audio id="music" loop>
   <source src="perfect.mp3" type="audio/mpeg">
 </audio>
 
 <div class="box" id="box">
-  <h1 id="title">Chota Baby, will you be my Valentine?</h1>
+  <h1 id="title">Chota Baby, will you be my Valentine? 💕</h1>
 
   <div class="btn-row" id="btnRow">
     <button id="yesBtn" onclick="onYesClick()">YES</button>
@@ -93,33 +96,54 @@ const btnRow = document.getElementById("btnRow");
 const noBtn = document.getElementById("noBtn");
 const music = document.getElementById("music");
 
-/* NO button escape logic */
-btnRow.addEventListener("pointermove", (e) => {
-  const rowRect = btnRow.getBoundingClientRect();
+let hasMoved = false;
+
+/* --------- iOS + Android SAFE MOVEMENT --------- */
+function moveNoButton(e) {
+  const rect = box.getBoundingClientRect();
   const noRect = noBtn.getBoundingClientRect();
 
-  const x = e.clientX - rowRect.left;
-  const y = e.clientY - rowRect.top;
+  let x, y;
 
-  const noX = noRect.left - rowRect.left + noRect.width / 2;
-  const noY = noRect.top - rowRect.top + noRect.height / 2;
-
-  if (Math.hypot(noX - x, noY - y) < 120) {
-    // switch to absolute ONLY when escaping
-    noBtn.style.position = "absolute";
-
-    const maxX = rowRect.width - noRect.width;
-    const maxY = rowRect.height - noRect.height;
-
-    noBtn.style.left = Math.random() * maxX + "px";
-    noBtn.style.top = Math.random() * maxY + "px";
-
-    noBtn.style.transform = "translateX(4px)";
-    setTimeout(() => noBtn.style.transform = "translateX(-4px)", 50);
+  if (e.touches) {
+    x = e.touches[0].clientX - rect.left;
+    y = e.touches[0].clientY - rect.top;
+  } else {
+    x = e.clientX - rect.left;
+    y = e.clientY - rect.top;
   }
-});
 
-/* YES button */
+  const noX = noRect.left - rect.left + noRect.width / 2;
+  const noY = noRect.top - rect.top + noRect.height / 2;
+
+  const distance = Math.hypot(noX - x, noY - y);
+
+  if (distance < 140) {
+
+    if (!hasMoved) {
+      noBtn.style.position = "absolute";
+      hasMoved = true;
+    }
+
+    // Nervous shake
+    noBtn.style.transform = "translateX(5px)";
+    setTimeout(() => {
+      noBtn.style.transform = "translateX(-5px)";
+    }, 50);
+
+    // Move inside the box only
+    noBtn.style.left =
+      Math.random() * (rect.width - noRect.width) + "px";
+    noBtn.style.top =
+      Math.random() * (rect.height - noRect.height) + "px";
+  }
+}
+
+/* Listen for both mouse and touch (IMPORTANT FOR iOS) */
+box.addEventListener("mousemove", moveNoButton);
+box.addEventListener("touchmove", moveNoButton);
+
+/* --------- YES BUTTON --------- */
 function onYesClick() {
   music.play().catch(() => {});
 
