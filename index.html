@@ -40,6 +40,8 @@
     border-radius: 40px;
     border: none;
     cursor: pointer;
+    position: relative;
+    z-index: 2;
   }
 
   #noBtn {
@@ -53,6 +55,7 @@
     left: 55%;
     top: 65%;
     transition: transform 0.1s;
+    z-index: 3;
   }
 
   p {
@@ -64,25 +67,23 @@
 
 <body>
 
-<!-- Your uploaded song -->
 <audio id="music" loop>
   <source src="perfect.mp3" type="audio/mpeg">
 </audio>
 
 <div class="box" id="box">
   <h1 id="title">Chota Baby, will you be my Valentine?</h1>
-  <button id="yesBtn">YES</button>
+  <button id="yesBtn" onclick="onYesClick()">YES</button>
   <button id="noBtn">NO</button>
 </div>
 
 <script>
 const box = document.getElementById("box");
-const yesBtn = document.getElementById("yesBtn");
 const noBtn = document.getElementById("noBtn");
 const music = document.getElementById("music");
 
-// NO button: nervous shake + move
-box.addEventListener("mousemove", (e) => {
+// NO button logic — SAFE for mouse + touch
+box.addEventListener("pointermove", (e) => {
   const rect = box.getBoundingClientRect();
   const noRect = noBtn.getBoundingClientRect();
 
@@ -101,9 +102,9 @@ box.addEventListener("mousemove", (e) => {
   }
 });
 
-// YES button — FINAL SAFE LOGIC
-yesBtn.addEventListener("click", () => {
-  // Try to play music, NEVER block UI
+// YES button — INLINE + GUARANTEED
+function onYesClick() {
+  // try playing music, never block UI
   music.play().catch(() => {});
 
   box.innerHTML = `
@@ -112,7 +113,7 @@ yesBtn.addEventListener("click", () => {
     <p>Dress cute, bring your smile… I’ll bring flowers 🌹</p>
     <p>(If payment doesn’t come on time, I’ll wash dishes 😌)</p>
   `;
-});
+}
 </script>
 
 </body>
