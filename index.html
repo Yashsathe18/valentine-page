@@ -1,60 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Valentine?</title>
-<style>
-  body {
-    background: #fce4ec;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    font-family: Arial, sans-serif;
-  }
-  .container {
-    text-align: center;
-    border: 3px dashed #ff4081;
-    width: 70%;
-    padding: 40px;
-    position: relative;
-  }
-  h1 {
-    font-size: 2.2rem;
-    color: #d81b60;
-    margin-bottom: 30px;
-  }
-  #yesBtn {
-    background: pink;
-    color: yellow;
-    padding: 20px 50px;
-    border-radius: 50px;
-    border: 3px solid #ff4081;
-    font-size: 1.5rem;
-    cursor: pointer;
-  }
-  #noBtn {
-    background: black;
-    color: white;
-    padding: 12px 25px;
-    border: 3px solid white;
-    border-radius: 8px;
-    position: absolute;
-  }
-</style>
-</head>
-<body>
-
-<div class="container" id="box">
-  <h1>Reeya, will you be my Valentine?</h1>
-  <button id="yesBtn">YES</button>
-  <button id="noBtn">NO</button>
-</div>
-
 <script>
 const noBtn = document.getElementById("noBtn");
+const yesBtn = document.getElementById("yesBtn");
 const box = document.getElementById("box");
 
 box.addEventListener("mousemove", function(e) {
@@ -78,7 +24,27 @@ box.addEventListener("mousemove", function(e) {
         noBtn.style.top = randY + "px";
     }
 });
-</script>
 
-</body>
-</html>
+// WHAT HAPPENS WHEN SHE TAPS YES 💖
+yesBtn.addEventListener("click", function() {
+    document.body.innerHTML = `
+      <div style="
+        height:100vh;
+        display:flex;
+        flex-direction:column;
+        justify-content:center;
+        align-items:center;
+        background:#ffb6c1;
+        color:#d81b60;
+        font-size:22px;
+        text-align:center;
+        padding:20px;
+        font-family:Arial;">
+        <h1>YAYY! 💕</h1>
+        <p>It’s officially a romantic dinner date on 14th! 🍽️✨</p>
+        <p>Dress cute, bring your smile… I’ll bring flowers 🌹</p>
+        <p>(And don’t worry — if payment doesn’t come on time, I’m washing plates to pay the bill 😉)</p>
+      </div>
+    `;
+});
+</script>
