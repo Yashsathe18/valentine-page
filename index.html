@@ -64,7 +64,7 @@
 
 <body>
 
-<!-- Your uploaded audio file -->
+<!-- Your uploaded song -->
 <audio id="music" loop>
   <source src="perfect.mp3" type="audio/mpeg">
 </audio>
@@ -76,13 +76,12 @@
 </div>
 
 <script>
-const noBtn = document.getElementById("noBtn");
-const yesBtn = document.getElementById("yesBtn");
 const box = document.getElementById("box");
-const title = document.getElementById("title");
+const yesBtn = document.getElementById("yesBtn");
+const noBtn = document.getElementById("noBtn");
 const music = document.getElementById("music");
 
-// NO button movement
+// NO button: nervous shake + move
 box.addEventListener("mousemove", (e) => {
   const rect = box.getBoundingClientRect();
   const noRect = noBtn.getBoundingClientRect();
@@ -102,9 +101,10 @@ box.addEventListener("mousemove", (e) => {
   }
 });
 
-// YES click → MUSIC STARTS HERE
+// YES button — FINAL SAFE LOGIC
 yesBtn.addEventListener("click", () => {
-  music.play();   // ✅ user interaction → allowed everywhere
+  // Try to play music, NEVER block UI
+  music.play().catch(() => {});
 
   box.innerHTML = `
     <h1>YAYY! 💕</h1>
