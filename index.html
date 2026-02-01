@@ -14,7 +14,6 @@
     justify-content: center;
     align-items: center;
     font-family: Arial, sans-serif;
-    overflow: hidden;
   }
 
   .box {
@@ -29,8 +28,8 @@
 
   h1 {
     color: #ff4f7a;
-    margin-bottom: 40px;
     font-size: 26px;
+    margin-bottom: 40px;
   }
 
   #yesBtn {
@@ -55,18 +54,23 @@
     top: 65%;
     transition: transform 0.1s;
   }
+
+  .yes-message p {
+    font-size: 18px;
+    margin: 10px 0;
+  }
 </style>
 </head>
 
 <body>
 
-<!-- Music (starts on first tap) -->
+<!-- Audio stays in DOM -->
 <audio id="music" loop>
   <source src="https://cdn.pixabay.com/download/audio/2022/10/18/audio_4c6dff7e98.mp3?filename=romantic-piano-ambient-121981.mp3" type="audio/mpeg">
 </audio>
 
 <div class="box" id="box">
-  <h1>Reeya, will you be my Valentine?</h1>
+  <h1 id="title">Chota Baby, will you be my Valentine?</h1>
   <button id="yesBtn">YES</button>
   <button id="noBtn">NO</button>
 </div>
@@ -75,9 +79,10 @@
 const noBtn = document.getElementById("noBtn");
 const yesBtn = document.getElementById("yesBtn");
 const box = document.getElementById("box");
+const title = document.getElementById("title");
 const music = document.getElementById("music");
 
-// NO button moves + shakes nervously
+// NO button: nervous shake + move
 box.addEventListener("mousemove", (e) => {
   const rect = box.getBoundingClientRect();
   const noRect = noBtn.getBoundingClientRect();
@@ -91,11 +96,9 @@ box.addEventListener("mousemove", (e) => {
   const distance = Math.hypot(noX - x, noY - y);
 
   if (distance < 100) {
-    // nervous shake
     noBtn.style.transform = "translateX(4px)";
     setTimeout(() => noBtn.style.transform = "translateX(-4px)", 50);
 
-    // move inside box
     const maxX = rect.width - noRect.width;
     const maxY = rect.height - noRect.height;
 
@@ -104,26 +107,16 @@ box.addEventListener("mousemove", (e) => {
   }
 });
 
-// YES button → start music + show message
+// YES button: start music + change content ONLY
 yesBtn.addEventListener("click", () => {
-  music.play(); // ✅ allowed on all browsers
+  music.play(); // ✅ guaranteed to work
 
-  document.body.innerHTML = `
-    <div style="
-      height:100vh;
-      background:#fde9ef;
-      display:flex;
-      flex-direction:column;
-      justify-content:center;
-      align-items:center;
-      text-align:center;
-      color:#ff4f7a;
-      padding:20px;
-      font-family:Arial;">
-      <h1>YAYY! 💕</h1>
+  box.innerHTML = `
+    <h1>YAYY! 💕</h1>
+    <div class="yes-message">
       <p>It’s officially a romantic dinner date on 14th 🍽️✨</p>
       <p>Dress cute, bring your smile… I’ll bring flowers 🌹</p>
-      <p>(If my payment doesn’t come on time, I’ll wash dishes 😌)</p>
+      <p>(If payment doesn’t come on time, I’ll wash dishes 😌)</p>
     </div>
   `;
 });
